@@ -2,14 +2,16 @@ console.log("script.js is running")
 var getWeatherBtn = document.getElementById("search-button");
 var cityNameEl = document.querySelector("#city-search");
 var citySearchEl = document.querySelector("#search-form");
+var pastSearchButtonEl = document.querySelector("#past-search-buttons")
+var displayAreasEl = document.getElementsByClassName("card")
+
 function setToday() {
-    var currentDay = moment().format("ddd, MMM, Do, YYYY")
-    $("#today").text("Forecast for Today: " + currentDay);
-    
+	var currentDay = moment().format("ddd, MMM, Do, YYYY")
+	$("#today").text("Forecast for Today: " + currentDay);
+
 };
 setToday();
 var getFutureWeather = function (cityName) {
-	console.log(cityName);
 	var apiUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&units=imperial&appid=c70684ab8e32b401ebbae77e992b5d9f';
 	fetch(apiUrl).then(function (response) {
 		if (response.ok) {
@@ -44,11 +46,11 @@ var getFutureWeather = function (cityName) {
 						card.appendChild(humidityEl);
 
 						var windEl = document.createElement('h4');
-						windEl.textContent = "WindSpeed: " + wind;
+						windEl.textContent = "Wind Speed: " + wind;
 						card.appendChild(windEl);
 
 						var conditionsEl = document.createElement("h4");
-						conditionsEl.textContent = "WeatherConditions: " + conditions;
+						conditionsEl.textContent = "Weather Conditions: " + conditions;
 						card.appendChild(conditionsEl);
 
 						console.log("wind:" + wind)
@@ -64,54 +66,93 @@ var getFutureWeather = function (cityName) {
 	})
 };
 var getTodayWeather = function (nameCity) {
-	console.log(nameCity)
-	var todayApi = "https://api.openweathermap.org/data/2.5/weather?q="+ nameCity +"&units=imperial&appid=c70684ab8e32b401ebbae77e992b5d9f";
-	fetch (todayApi).then(function(response){
+	var todayApi = "https://api.openweathermap.org/data/2.5/weather?q=" + nameCity + "&units=imperial&appid=c70684ab8e32b401ebbae77e992b5d9f";
+	fetch(todayApi).then(function (response) {
 		if (response.ok) {
-			response.json().then(function(data){
-				var todayTemp = data.main.temp; 
-				console.log("todaytemp"+ todayTemp);
+			response.json().then(function (data) {
+				// console.log(data);
+				var todayName = data.name;
+				console.log("City: "+ todayName)
+				var todayTemp = data.main.temp;
+				console.log("todaytemp" + todayTemp);
 				var todayHumidity = data.main.humidity;
 				console.log('todayHumidity' + todayHumidity);
-				var todayConditions= data.weather[0].description; 
+				var todayConditions = data.weather[0].description;
 				console.log(todayConditions)
-				var todayIcon = data.weather[0].icon;
-				console.log(todayIcon);
+
 
 				var todayForecastEl = document.querySelector('.today-forecast');
-						var card = document.createElement("div");
-						card.classList.add("card");
-						todayForecastEl.appendChild(card);
+				var card = document.createElement("div");
+				card.classList.add("card");
+				todayForecastEl.appendChild(card);
 
-						var tempEl = document.createElement("h4");
-						tempEl.textContent = "Temp: " + todayTemp;
-						card.appendChild(tempEl);
+				var todayEl = document.createElement("h2");
+				todayEl.textContent = "Weather for: " + todayName;
+				card.appendChild(todayEl);
 
-						var humidityEl = document.createElement("h4");
-						humidityEl.textContent = "Humidity: " + todayHumidity;
-						card.appendChild(humidityEl);
+				var tempEl = document.createElement("h4");
+				tempEl.textContent = "Temp: " + todayTemp;
+				card.appendChild(tempEl);
 
-						var conditionsEl = document.createElement("h4");
-						conditionsEl.textContent = "WeatherConditions: " + todayConditions;
-						card.appendChild(conditionsEl);
+				var humidityEl = document.createElement("h4");
+				humidityEl.textContent = "Humidity: " + todayHumidity;
+				card.appendChild(humidityEl);
+
+				var conditionsEl = document.createElement("h4");
+				conditionsEl.textContent = "Weather Conditions: " + todayConditions;
+				card.appendChild(conditionsEl);
 			})
 		}
 	})
 }
+function init() {
+	var savedCity = localStorage.getItem("savedcity");
+	if (savedCity !== null) {
+		city = savedCity;
+		console.log(savedCity);
+		pastSearch(savedCity);
+	}
+}
 
-var formSearch = function (event) {
-	console.log('formSearch');
-	event.preventDefault();
-	var city = cityNameEl.value.trim();
-	if (city) {
-		getFutureWeather(city);
-		getTodayWeather(city);
-		cityNameEl.value = '';
+	var formSearch = function (event) {
+		// console.log(formSearch);
+		event.preventDefault();
+		var city = cityNameEl.value.trim();
+		if (city) {
+			getFutureWeather(city);
+			getTodayWeather(city);
+			displayAreasEl.textContent= '';
+			cityNameEl.value = '';
+			localStorage.setItem("savedcity", city);
+			console.log(localStorage);
+		}
+		pastSearch(city);
+		console.log(city);
+	}
+	var pastSearch = function (pastSearch) {
+		console.log('past Search: ', pastSearch);
+		if (pastSearch != '') {
+			var pastSearchEl = document.createElement('button');
+			pastSearchEl.textContent = pastSearch;
+			pastSearchEl.classList = 'border';
+			pastSearchEl.setAttribute('data-city', pastSearch);
+			pastSearchEl.addEventListener('click', searchAgain);
+
+			pastSearchButtonEl.prepend(pastSearchEl);
+			
+
+		}
+	};
+
+	var searchAgain = function (event) {
+		event.preventDefault();
+		var targetCity = event.target.getAttribute('data-city');
+		displayAreasEl.textContent= '';
+		console.log(targetCity);
+		getTodayWeather(targetCity);
+		getFutureWeather(targetCity);
 	}
 
-	console.log(city);
-};
 
-citySearchEl.addEventListener("submit", formSearch);
-
-// getFutureWeather("Philadelphia");
+	citySearchEl.addEventListener("submit", formSearch);
+	init();

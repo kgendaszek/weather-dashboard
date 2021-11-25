@@ -1,8 +1,35 @@
 
 body {
-background-color: aqua;
+background-color: rgba(0, 255, 255, 0.486);
 }
 .card {
-background-color: blue;
-
+background-color: rgb(86, 114, 196);
+padding: 15px;
+margin: 8px;
+border: black;
+border-style: ridge;
+}
+h2{
+    font-family: cursive;
+}
+h3{
+    font-size: medium;
+}
+h4{
+    font-size:smaller;
+}
+#search-button{
+    background-color: rgb(86, 114, 196);
+    color: black;
+    border: black;
+    border-style: ridge;
+}
+#city-search{
+    border: black;
+    border-style: ridge;
+}
+button{
+    border: black;
+    border-style: ridge;
+    background-color: rgb(86, 114, 196);
 }
