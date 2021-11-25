@@ -34,6 +34,7 @@ katieshake27@gmail.com
 
 
 Live Website:
-
+https://kgendaszek.github.io/weather-dashboard/
+https://github.com/kgendaszek/weather-dashboard
 
 Check out my other work on GitHub.

@@ -29,7 +29,7 @@ var getWeather = function (cityName) {
 				console.log("conditions:" + conditions)
 				console.log("temp:" + temp)
 				console.log("humidity:" + humidity)
-				console.log("date:"date);
+				console.log("date:" + date);
 			}
 		}
 
