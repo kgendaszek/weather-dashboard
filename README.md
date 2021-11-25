@@ -7,7 +7,7 @@
 * [Contributors](#contributors)
 * [Questions](#questions)
 ## Description
-
+An application that show you both the current weather and future five days of weather.
 
 ## Install
 No install needed.
@@ -30,7 +30,7 @@ If you have any questions about the application contact me directly at katieshak
 # Contact
 katieshake27@gmail.com
 # Final Product
-![Final image.]()
+![Final image.](assets/weather-finalish.png)
 
 
 Live Website:
